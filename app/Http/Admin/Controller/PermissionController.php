@@ -26,14 +26,13 @@ use App\Schema\MenuSchema;
 use App\Schema\RoleSchema;
 use App\Service\Permission\UserService;
 use Hyperf\Collection\Arr;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
-use Hyperf\Swagger\Annotation\Post;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Mine\Swagger\Attributes\PageResponse;
 use Mine\Swagger\Attributes\ResultResponse;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(AccessTokenMiddleware::class)]
 final class PermissionController extends AbstractController
 {
@@ -44,12 +43,9 @@ final class PermissionController extends AbstractController
         private readonly UserService $userService
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/permission/menus',
-        operationId: 'PermissionMenus',
-        summary: '获取当前用户菜单',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['权限']
+        methods: ["GET"],
     )]
     #[PageResponse(
         instance: MenuSchema::class,
@@ -68,12 +64,9 @@ final class PermissionController extends AbstractController
         );
     }
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/permission/roles',
-        operationId: 'PermissionRoles',
-        summary: '获取当前用户角色',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['权限']
+        methods: ["GET"],
     )]
     #[PageResponse(
         instance: RoleSchema::class,
@@ -88,12 +81,9 @@ final class PermissionController extends AbstractController
         );
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/permission/update',
-        operationId: 'updateInfo',
-        summary: '更新用户信息',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['权限'],
+        methods: ["POST"],
     )]
     #[ResultResponse(new Result())]
     public function update(PermissionRequest $request): Result

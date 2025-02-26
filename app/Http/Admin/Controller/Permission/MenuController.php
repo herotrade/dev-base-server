@@ -20,20 +20,14 @@ use App\Http\Common\Middleware\OperationMiddleware;
 use App\Http\Common\Result;
 use App\Http\CurrentUser;
 use App\Service\Permission\MenuService;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Swagger\Annotation\Delete;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
-use Hyperf\Swagger\Annotation\JsonContent;
-use Hyperf\Swagger\Annotation\Post;
-use Hyperf\Swagger\Annotation\Put;
-use Hyperf\Swagger\Annotation\RequestBody;
 use Mine\Access\Attribute\Permission;
-use Mine\Swagger\Attributes\PageResponse;
-use Mine\Swagger\Attributes\ResultResponse;
+use Mine\Support\Middleware\CorsMiddleware;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
 #[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
 #[Middleware(middleware: OperationMiddleware::class, priority: 98)]
@@ -44,15 +38,11 @@ final class MenuController extends AbstractController
         private readonly CurrentUser $user
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/menu/list',
-        operationId: 'menuList',
-        summary: '菜单列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['菜单管理']
+        methods: ["GET"],
     )]
     #[Permission(code: 'permission:menu:index')]
-    #[ResultResponse(instance: new Result())]
     public function pageList(RequestInterface $request): Result
     {
         return $this->success(data: $this->service->getRepository()->list([
@@ -61,17 +51,10 @@ final class MenuController extends AbstractController
         ]));
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/menu',
-        operationId: 'menuCreate',
-        summary: '创建菜单',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['菜单管理']
+        methods: ["POST"],
     )]
-    #[RequestBody(
-        content: new JsonContent(ref: MenuRequest::class, title: '创建菜单')
-    )]
-    #[PageResponse(instance: new Result())]
     #[Permission(code: 'permission:menu:create')]
     public function create(MenuRequest $request): Result
     {
@@ -81,17 +64,10 @@ final class MenuController extends AbstractController
         return $this->success();
     }
 
-    #[Put(
+    #[RequestMapping(
         path: '/admin/menu/{id}',
-        operationId: 'menuEdit',
-        summary: '编辑菜单',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['菜单管理']
+        methods: ["PUT"],
     )]
-    #[RequestBody(
-        content: new JsonContent(ref: MenuRequest::class, title: '编辑菜单')
-    )]
-    #[PageResponse(instance: new Result())]
     #[Permission(code: 'permission:menu:save')]
     public function save(int $id, MenuRequest $request): Result
     {
@@ -101,14 +77,10 @@ final class MenuController extends AbstractController
         return $this->success();
     }
 
-    #[Delete(
+    #[RequestMapping(
         path: '/admin/menu',
-        operationId: 'menuDelete',
-        summary: '删除菜单',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['菜单管理']
+        methods: ["DELETE"],
     )]
-    #[PageResponse(instance: new Result())]
     #[Permission(code: 'permission:menu:delete')]
     public function delete(): Result
     {

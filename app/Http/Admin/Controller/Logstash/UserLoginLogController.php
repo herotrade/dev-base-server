@@ -19,15 +19,14 @@ use App\Http\Common\Result;
 use App\Http\CurrentUser;
 use App\Schema\UserLoginLogSchema;
 use App\Service\LogStash\UserLoginLogService;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Swagger\Annotation\Delete;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
 use Mine\Access\Attribute\Permission;
 use Mine\Swagger\Attributes\PageResponse;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
 #[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
 final class UserLoginLogController extends AbstractController
@@ -37,12 +36,9 @@ final class UserLoginLogController extends AbstractController
         protected readonly CurrentUser $currentUser
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/user-login-log/list',
-        operationId: 'UserLoginLogList',
-        summary: '用户登录日志列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['系统管理'],
+        methods: ["GET"],
     )]
     #[Permission(code: 'log:userLogin:list')]
     #[PageResponse(instance: UserLoginLogSchema::class)]
@@ -57,12 +53,9 @@ final class UserLoginLogController extends AbstractController
         );
     }
 
-    #[Delete(
+    #[RequestMapping(
         path: '/admin/user-login-log',
-        operationId: 'UserLoginLogDelete',
-        summary: '删除用户登录日志',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['系统管理'],
+        methods: ["DELETE"],
     )]
     #[Permission(code: 'log:userLogin:delete')]
     public function delete(RequestInterface $request): Result

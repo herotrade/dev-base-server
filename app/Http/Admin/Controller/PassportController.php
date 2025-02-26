@@ -23,14 +23,13 @@ use App\Model\Enums\User\Type;
 use App\Schema\UserSchema;
 use App\Service\PassportService;
 use Hyperf\Collection\Arr;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Swagger\Annotation as OA;
-use Hyperf\Swagger\Annotation\Post;
 use Mine\Jwt\Traits\RequestScopedTokenTrait;
-use Mine\Swagger\Attributes\ResultResponse;
 
-#[OA\HyperfServer(name: 'http')]
+#[Controller]
 final class PassportController extends AbstractController
 {
     use RequestScopedTokenTrait;
@@ -40,24 +39,10 @@ final class PassportController extends AbstractController
         private readonly CurrentUser $currentUser
     ) {}
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/passport/login',
-        operationId: 'passportLogin',
-        summary: '系统登录',
-        tags: ['admin:passport']
+        methods: ["POST"],
     )]
-    #[ResultResponse(
-        instance: new Result(data: new PassportLoginVo()),
-        title: '登录成功',
-        description: '登录成功返回对象',
-        example: '{"code":200,"message":"成功","data":{"access_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjIwOTQwNTYsIm5iZiI6MTcyMjA5NDAiwiZXhwIjoxNzIyMDk0MzU2fQ.7EKiNHb_ZeLJ1NArDpmK6sdlP7NsDecsTKLSZn_3D7k","refresh_token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MjIwOTQwNTYsIm5iZiI6MTcyMjA5NDAiwiZXhwIjoxNzIyMDk0MzU2fQ.7EKiNHb_ZeLJ1NArDpmK6sdlP7NsDecsTKLSZn_3D7k","expire_at":300}}'
-    )]
-    #[OA\RequestBody(content: new OA\JsonContent(
-        ref: PassportLoginRequest::class,
-        title: '登录请求参数',
-        required: ['username', 'password'],
-        example: '{"username":"admin","password":"123456"}'
-    ))]
     public function login(PassportLoginRequest $request): Result
     {
         $username = (string) $request->input('username');
@@ -76,14 +61,10 @@ final class PassportController extends AbstractController
         );
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/passport/logout',
-        operationId: 'passportLogout',
-        summary: '退出',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['admin:passport']
+        methods: ["POST"],
     )]
-    #[ResultResponse(instance: new Result(), example: '{"code":200,"message":"成功","data":[]}')]
     #[Middleware(AccessTokenMiddleware::class)]
     public function logout(RequestInterface $request): Result
     {
@@ -91,17 +72,11 @@ final class PassportController extends AbstractController
         return $this->success();
     }
 
-    #[OA\Get(
+    #[RequestMapping(
         path: '/admin/passport/getInfo',
-        operationId: 'getInfo',
-        summary: '获取用户信息',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['admin:passport']
+        methods: ["GET"],
     )]
     #[Middleware(AccessTokenMiddleware::class)]
-    #[ResultResponse(
-        instance: new Result(data: UserSchema::class),
-    )]
     public function getInfo(): Result
     {
         return $this->success(
@@ -112,17 +87,11 @@ final class PassportController extends AbstractController
         );
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/passport/refresh',
-        operationId: 'refresh',
-        summary: '刷新token',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['admin:passport']
+        methods: ["POST"],
     )]
     #[Middleware(RefreshTokenMiddleware::class)]
-    #[ResultResponse(
-        instance: new Result(data: new PassportLoginVo())
-    )]
     public function refresh(CurrentUser $user): Result
     {
         return $this->success($user->refresh());

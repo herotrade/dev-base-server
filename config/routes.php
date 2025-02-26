@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @contact  @chenmaq
  
  */
+
+use Hyperf\HttpServer\Response;
 use Hyperf\HttpServer\Router\Router;
 
 Router::get('/', static function () {
@@ -17,4 +19,9 @@ Router::get('/', static function () {
 
 Router::get('/favicon.ico', static function () {
     return '';
+});
+
+// config/routes.php 或类似的路由配置文件
+Router::addRoute(['OPTIONS'], '/{path:.+}', function () {
+    return (new Response())->withStatus(204);
 });

@@ -19,16 +19,15 @@ use App\Http\Common\Result;
 use App\Http\CurrentUser;
 use App\Schema\UserOperationLogSchema;
 use App\Service\LogStash\UserOperationLogService;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Hyperf\HttpServer\Contract\RequestInterface;
-use Hyperf\Swagger\Annotation\Delete;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
 use Mine\Access\Attribute\Permission;
 use Mine\Swagger\Attributes\PageResponse;
 use Mine\Swagger\Attributes\ResultResponse;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
 #[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
 final class UserOperationLogController extends AbstractController
@@ -38,12 +37,9 @@ final class UserOperationLogController extends AbstractController
         protected readonly CurrentUser $currentUser
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/user-operation-log/list',
-        operationId: 'UserOperationLogList',
-        summary: '用户操作日志列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['系统管理'],
+        methods: ["GET"],
     )]
     #[Permission(code: 'log:userOperation:list')]
     #[PageResponse(instance: UserOperationLogSchema::class)]
@@ -56,12 +52,9 @@ final class UserOperationLogController extends AbstractController
         ));
     }
 
-    #[Delete(
+    #[RequestMapping(
         path: '/admin/user-operation-log',
-        operationId: 'UserOperationLogDelete',
-        summary: '删除用户操作日志',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['系统管理'],
+        methods: ["DELETE"],
     )]
     #[Permission(code: 'log:userOperation:delete')]
     #[ResultResponse(instance: Result::class)]

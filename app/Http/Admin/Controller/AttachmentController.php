@@ -20,17 +20,15 @@ use App\Http\Common\Result;
 use App\Http\CurrentUser;
 use App\Schema\AttachmentSchema;
 use App\Service\AttachmentService;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\Swagger\Annotation\Delete;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
-use Hyperf\Swagger\Annotation\Post;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Mine\Access\Attribute\Permission;
 use Mine\Swagger\Attributes\PageResponse;
 use Mine\Swagger\Attributes\ResultResponse;
 use Symfony\Component\Finder\SplFileInfo;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
 #[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
 #[Middleware(middleware: OperationMiddleware::class, priority: 98)]
@@ -41,12 +39,9 @@ final class AttachmentController extends AbstractController
         protected readonly CurrentUser $currentUser
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/attachment/list',
-        operationId: 'AttachmentList',
-        summary: '附件列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['数据中心'],
+        methods: ["GET"],
     )]
     #[Permission(code: 'dataCenter:attachment:list')]
     #[PageResponse(instance: AttachmentSchema::class)]
@@ -62,12 +57,9 @@ final class AttachmentController extends AbstractController
         );
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/attachment/upload',
-        operationId: 'UploadAttachment',
-        summary: '上传附件',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['数据中心'],
+        methods: ["POST"],
     )]
     #[Permission(code: 'dataCenter:attachment:upload')]
     #[ResultResponse(instance: new Result())]
@@ -82,9 +74,9 @@ final class AttachmentController extends AbstractController
         );
     }
 
-    #[Delete(
+    #[RequestMapping(
         path: '/admin/attachment/{id}',
-        operationId: 'DeleteAttachment',
+        methods: ["DELETE"],
     )]
     #[Permission(code: 'dataCenter:attachment:delete')]
     #[ResultResponse(instance: new Result())]

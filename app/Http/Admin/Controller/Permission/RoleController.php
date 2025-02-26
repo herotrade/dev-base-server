@@ -26,19 +26,14 @@ use App\Model\Permission\Menu;
 use App\Schema\RoleSchema;
 use App\Service\Permission\RoleService;
 use Hyperf\Collection\Arr;
+use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
-use Hyperf\Swagger\Annotation\Delete;
-use Hyperf\Swagger\Annotation\Get;
-use Hyperf\Swagger\Annotation\HyperfServer;
-use Hyperf\Swagger\Annotation\JsonContent;
-use Hyperf\Swagger\Annotation\Post;
-use Hyperf\Swagger\Annotation\Put;
-use Hyperf\Swagger\Annotation\RequestBody;
+use Hyperf\HttpServer\Annotation\RequestMapping;
 use Mine\Access\Attribute\Permission;
 use Mine\Swagger\Attributes\PageResponse;
 use Mine\Swagger\Attributes\ResultResponse;
 
-#[HyperfServer(name: 'http')]
+#[Controller]
 #[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
 #[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
 #[Middleware(middleware: OperationMiddleware::class, priority: 98)]
@@ -49,14 +44,10 @@ final class RoleController extends AbstractController
         private readonly CurrentUser $currentUser
     ) {}
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/role/list',
-        operationId: 'roleList',
-        summary: '角色列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
+        methods: ["GET"],
     )]
-    #[PageResponse(instance: RoleSchema::class)]
     #[Permission(code: 'permission:role:index')]
     public function pageList(): Result
     {
@@ -69,18 +60,11 @@ final class RoleController extends AbstractController
         );
     }
 
-    #[Post(
+    #[RequestMapping(
         path: '/admin/role',
-        operationId: 'roleCreate',
-        summary: '创建角色',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
-    )]
-    #[RequestBody(
-        content: new JsonContent(ref: RoleRequest::class)
+        methods: ["POST"],
     )]
     #[Permission(code: 'permission:role:save')]
-    #[ResultResponse(instance: new Result())]
     public function create(RoleRequest $request): Result
     {
         $this->service->create(array_merge($request->validated(), [
@@ -89,18 +73,11 @@ final class RoleController extends AbstractController
         return $this->success();
     }
 
-    #[Put(
+    #[RequestMapping(
         path: '/admin/role/{id}',
-        operationId: 'roleSave',
-        summary: '保存角色',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
-    )]
-    #[RequestBody(
-        content: new JsonContent(ref: RoleRequest::class)
+        methods: ["PUT"],
     )]
     #[Permission(code: 'permission:role:update')]
-    #[ResultResponse(instance: new Result())]
     public function save(int $id, RoleRequest $request): Result
     {
         $this->service->updateById($id, array_merge($request->validated(), [
@@ -109,14 +86,10 @@ final class RoleController extends AbstractController
         return $this->success();
     }
 
-    #[Delete(
+    #[RequestMapping(
         path: '/admin/role',
-        operationId: 'roleDelete',
-        summary: '删除角色',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
+        methods: ["DELETE"],
     )]
-    #[ResultResponse(instance: new Result())]
     #[Permission(code: 'permission:role:delete')]
     public function delete(): Result
     {
@@ -124,16 +97,9 @@ final class RoleController extends AbstractController
         return $this->success();
     }
 
-    #[Get(
+    #[RequestMapping(
         path: '/admin/role/{id}/permissions',
-        operationId: 'setRolePermission',
-        summary: '获取角色权限列表',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
-    )]
-    #[ResultResponse(
-        instance: new Result(),
-        example: '{"code":200,"message":"成功","data":[{"id":59,"name":"xdrljpefIZ"},{"id":60,"name":"GIdOejHL2R"},{"id":61,"name":"ZpEnJv00VG"}]}'
+        methods: ["GET"],
     )]
     #[Permission(code: 'permission:role:getMenu')]
     public function getRolePermissionForRole(int $id): Result
@@ -143,17 +109,10 @@ final class RoleController extends AbstractController
         ]))->toArray());
     }
 
-    #[Put(
+    #[RequestMapping(
         path: '/admin/role/{id}/permissions',
-        operationId: 'roleGrantPermissions',
-        summary: '赋予角色权限',
-        security: [['Bearer' => [], 'ApiKey' => []]],
-        tags: ['角色管理'],
+        methods: ["PUT"],
     )]
-    #[ResultResponse(instance: new Result())]
-    #[RequestBody(content: new JsonContent(
-        ref: BatchGrantPermissionsForRoleRequest::class
-    ))]
     #[Permission(code: 'permission:role:setMenu')]
     public function batchGrantPermissionsForRole(int $id, BatchGrantPermissionsForRoleRequest $request): Result
     {

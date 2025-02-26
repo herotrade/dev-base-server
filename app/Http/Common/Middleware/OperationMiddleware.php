@@ -64,7 +64,7 @@ class OperationMiddleware implements MiddlewareInterface
         if ($operator !== Generator::UNDEFINED) {
             $this->dispatcher->dispatch(new RequestOperationEvent(
                 $this->user->id(),
-                $operator->summary,
+                $method,
                 $request->getUri()->getPath(),
                 Arr::first(array: $this->container->get(Request::class)->getClientIps(), callback: static fn ($val) => $val, default: '0.0.0.0'),
                 $request->getMethod(),
