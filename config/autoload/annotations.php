@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 
 use Hyperf\Database\Commands\Ast\ModelRewriteGetterSetterVisitor;
-use Mine\AppStore\Plugin;
 
 return [
     'scan' => [
@@ -21,7 +20,7 @@ return [
         'collectors' => [],
         'ignore_annotations' => ['mixin'],
         'class_map' => [
-            ModelRewriteGetterSetterVisitor::class => BASE_PATH.'/class_map/ModelRewriteGetterSetter.php'
+            ModelRewriteGetterSetterVisitor::class => BASE_PATH . '/class_map/ModelRewriteGetterSetter.php'
         ]
     ],
 ];
