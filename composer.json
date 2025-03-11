@@ -84,7 +84,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "HyperfTests\\": "./tests/"
+      "HyperfTests\\": "./tests/",
+      "Mine\\AppStore\\": "class_map/"
     }
   },
   "minimum-stability": "dev",
