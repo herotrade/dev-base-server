@@ -11,7 +11,12 @@ vendor/
 .DS_Store
 .phpunit*
 *.cache
-.vscode/
+# 忽略整个 .vscode 目录
+.vscode/*
+# 再取消忽略具体文件 运行和调试
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/kill_by_port.sh
 public
 !web/public
 *.lock
