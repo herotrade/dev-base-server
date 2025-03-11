@@ -16,15 +16,15 @@ use App\Http\Api\Request\V1\UserRequest;
 use App\Http\Common\Controller\AbstractController;
 use App\Http\Common\Result;
 use App\Service\PassportService;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Swagger\Annotation\HyperfServer;
 use Hyperf\Swagger\Annotation\Post;
 
 #[HyperfServer(name: 'http')]
 final class UserController extends AbstractController
 {
-    public function __construct(
-        private readonly PassportService $passportService
-    ) {}
+    #[Inject]
+    private readonly PassportService $passportService;
 
     #[Post(
         path: '/api/v1/login',
