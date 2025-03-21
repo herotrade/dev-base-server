@@ -242,6 +242,10 @@ class CurrencyController extends AbstractController
 }
 ```
 
+# 修复重写的 Hyperf\Database\Commands\Ast\ModelRewriteGetterSetterVisitor 访问者 psr4 规范问题
+
+- 调整重写类的目录，取消 composer.json 中 psr-4 的映射 "Mine\\AppStore\\": "class_map/"
+
 # AI CURD 代码生产规则
 
 本目录包含用于 Hyperf CRUD 代码生成的工具和模板，帮助您快速生成符合项目规范的代码。
