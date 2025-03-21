@@ -1,0 +1,319 @@
+你是经验丰富的PHP开发工程师，擅长Laravel和Hyperf框架，本项目使用 hyperf 框架开发，请按照以下规范开发代码：
+
+# 开发规范
+
+## PHP 代码风格
+
+- 所有 PHP 文件必须使用 `<?php` 标签开始
+- 所有 PHP 文件必须在开头添加 `declare(strict_types=1);`
+- 所有 PHP 文件必须包含标准文件头注释，包含项目名称、链接、文档和联系方式
+- 类名必须使用 PascalCase 命名法
+- 方法名必须使用 camelCase 命名法
+- 属性名、变量名必须使用 camelCase 命名法
+- 常量必须使用全大写 SNAKE_CASE 命名法
+- 所有类必须有命名空间声明
+- 所有类必须有适当的 PHPDoc 注释
+- 所有方法必须有返回类型声明
+- 所有方法参数必须有类型声明
+- 所有属性必须有类型声明
+- 代码缩进使用 4 个空格
+- 行尾不应有多余的空格
+- 文件末尾必须有一个空行
+- 使用单引号定义字符串，除非字符串中包含变量或单引号
+
+## 控制器规范
+
+- 控制器类必须继承 AbstractController
+- 控制器方法应返回 Result 对象
+- 控制器方法应使用 success()、error() 或 json() 方法返回结果
+- 控制器不应包含业务逻辑，应委托给对应的 Service 类
+- 控制器方法应进行输入验证
+- 控制器应遵循 RESTful API 设计原则
+
+## 模型规范
+
+- 模型类应继承 Hyperf\DbConnection\Model\Model
+- 模型属性应使用 PHPDoc 注释声明
+- 模型应声明 $table 属性
+- 模型关联方法应使用正确的返回类型声明
+- 模型应使用 final 关键字声明（除非需要被继承）
+- 模型应使用强类型枚举定义状态常量
+
+## 服务规范
+
+- 服务类应包含业务逻辑
+- 服务类应使用依赖注入获取依赖
+- 服务方法应有明确的返回类型
+- 服务类应处理异常并转换为业务异常
+- 服务类不应直接处理 HTTP 请求和响应
+
+## 异常处理规范
+
+- 异常类应继承适当的基础异常类
+- 异常应包含错误码和错误消息
+- 业务异常应使用 BusinessException 类
+- 正常状态异常应使用 NormalStatusException 类
+
+## 配置文件规范
+
+- 配置文件应返回数组
+- 配置键应使用 snake_case 命名法
+- 配置文件应包含注释说明配置项的用途
+- 敏感配置应使用环境变量
+
+## 目录结构规范
+
+- 控制器应放在 app/Http/{模块}/Controller/xxx 目录下
+- 模型应放在 app/Model 目录下
+- 服务应放在 app/Http/{模块}/Service/xxx 目录下, 不要放在 app/Service 目录下
+- 异常应放在 app/Exception 目录下
+- 中间件应放在 app/Http/{模块}/Middleware 目录下
+- 请求验证类应放在 app/Http/{模块}/Request/xxx 目录下
+- 资源应放在 app/Http/{模块}/Resource/xxx 目录下, 不要放在 app/Resource 目录下
+- 命令应放在 app/Command 目录下
+- 数据库迁移文件应放在 databases/migrations 目录下
+
+## 注释规范
+
+- 类应有完整的 PHPDoc 注释，包括描述、属性和方法
+- 公共方法应有 PHPDoc 注释，包括描述、参数和返回值
+- 复杂的私有方法应有注释说明其用途
+- 代码中的复杂逻辑应有行内注释说明
+- TODO 和 FIXME 注释应包含具体的任务描述和责任人
+
+## 测试规范
+
+- 测试类应继承 HyperfTests\TestCase
+- 测试方法名应以 test 开头
+- 测试应包含断言
+- 测试应覆盖正常和异常情况
+- 测试应使用 Mock 对象隔离依赖
+
+## 获取数据列表的接口尽量使用 apielf/hyperf-query-builder 扩展。文档参考：vendor/apielf/hyperf-query-builder/README.md
+- 类命名空间:
+
+|class                   |namespace                      |
+|------------------------|-------------------------------|
+|AllowedFilter           |ApiElf\QueryBuilder            |
+|AllowedInclude          |ApiElf\QueryBuilder            |
+|AllowedSort             |ApiElf\QueryBuilder            |
+|ConfigProvider          |ApiElf\QueryBuilder            |
+|QueryBuilder            |ApiElf\QueryBuilder            |
+|QueryBuilderRequest     |ApiElf\QueryBuilder            |
+|AddsFieldsToQuery       |ApiElf\QueryBuilder\Concerns   |
+|AddsIncludesToQuery     |ApiElf\QueryBuilder\Concerns   |
+|FiltersQuery            |ApiElf\QueryBuilder\Concerns   |
+|SortsQuery              |ApiElf\QueryBuilder\Concerns   |
+|InvalidFilterQuery      |ApiElf\QueryBuilder\Exceptions |
+|Filter                  |ApiElf\QueryBuilder\Filters    |
+|FiltersCallback         |ApiElf\QueryBuilder\Filters    |
+|FiltersExact            |ApiElf\QueryBuilder\Filters    |
+|FiltersPartial          |ApiElf\QueryBuilder\Filters    |
+|FiltersScope            |ApiElf\QueryBuilder\Filters    |
+|FiltersTrashed          |ApiElf\QueryBuilder\Filters    |
+|IgnoresValueTrait       |ApiElf\QueryBuilder\Filters    |
+|IncludeCount            |ApiElf\QueryBuilder\Includes   |
+|IncludeInterface        |ApiElf\QueryBuilder\Includes   |
+|IncludeRelationship     |ApiElf\QueryBuilder\Includes   |
+|Sort                    |ApiElf\QueryBuilder\Sorts      |
+|SortField               |ApiElf\QueryBuilder\Sorts      |
+
+
+- 获取数据列表的接口应使用 QueryBuilder 查询数据
+- 获取数据列表的接口应使用 Paginator 分页数据
+- 获取数据列表的接口应使用 Filter 过滤数据
+- 获取数据列表的接口应使用 Sort 排序数据
+- 获取数据列表的接口应使用 Include 包含关联数据
+- 获取数据列表的接口应使用 Append 追加数据
+
+## 编写接口规范
+- 遵循 Restful 规范
+- 使用 Hyperf\HttpServer\Annotation 注解
+- 控制器、验证器中都不要使用 Swagger 注解，不需要生成 Swagger 接口文档
+- 列表接口：#[GetMapping('list')]
+- 详情接口：#[GetMapping('{id}')]
+- 创建接口：#[PostMapping('')]
+- 更新接口：#[PutMapping('{id}')]
+- 删除接口：#[DeleteMapping('{id}')]
+- 批量删除接口：#[DeleteMapping('batch/delete')]
+- 创建管理端接口时需要添加中间件：
+
+#[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
+#[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
+#[Middleware(middleware: OperationMiddleware::class, priority: 98)]
+
+- 创建管理端（Admin 模块）接口时需要控制权限，使用注解：
+
+|接口     |权限注解                                        |
+|--------|-----------------------------------------------|
+|列表     |#[Permission(code: 'xxx:index')]    |
+|创建     |#[Permission(code: 'xxx:create')]   |
+|更新     |#[Permission(code: 'xxx:update')]   |
+|删除     |#[Permission(code: 'xxx:delete')]   |
+|批量删除  |#[Permission(code: 'xxx:delete')]   |
+
+- Api 模块接口不需要控制权限，但需要默认添加登录中间件（命名空间：App\Http\Api\Middleware\TokenMiddleware）：
+
+#[Middleware(middleware: TokenMiddleware::class, priority: 100)]
+
+- 不要使用 Repository 层！筛选过滤在 Service 层使用 apielf/hyperf-query-builder 扩展直接实现
+- 获取数据接口使用 API 资源构造器 Resource 对数据进行格式化（在没有特殊说明的情况下默认直接使用 App\Http\Common\Resource\BaseResource 资源类，不需要创建独立的资源类）。如果创建独立的资源类，请继承 App\Http\Common\Resource\BaseResource 资源类。
+- 默认创建的资源类中 toArray 方法代码默认如下（有需求由开发者自行完善）：
+```
+/**
+* 转换资源为数组
+*/
+public function toArray(): array
+{
+    return parent::toArray();
+}
+```
+
+## hyperf 文档（如果有需要查阅文档，请参考 hyperf 文档）
+
+### 前言
+- [项目介绍](#/README)
+
+### 版本管理
+- [版本计划](https://hyperf.wiki/3.1/#/zh-cn/release-planning)
+- [版本说明](https://hyperf.wiki/3.1/#/zh-cn/versions)
+- [版本更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/3.1)
+
+### 快速入门
+- [安装](https://hyperf.wiki/3.1/#/zh-cn/quick-start/install)
+- [快速开始](https://hyperf.wiki/3.1/#/zh-cn/quick-start/overview)
+- [常见问题](https://hyperf.wiki/3.1/#/zh-cn/quick-start/questions)
+- [编程须知](https://hyperf.wiki/3.1/#/zh-cn/quick-start/important)
+
+### 核心架构
+- [生命周期](https://hyperf.wiki/3.1/#/zh-cn/lifecycle)
+- [协程](https://hyperf.wiki/3.1/#/zh-cn/coroutine)
+- [配置](https://hyperf.wiki/3.1/#/zh-cn/config)
+- [注解](https://hyperf.wiki/3.1/#/zh-cn/annotation)
+- [依赖注入](https://hyperf.wiki/3.1/#/zh-cn/di)
+- [事件机制](https://hyperf.wiki/3.1/#/zh-cn/event)
+- [AOP 面向切面编程](https://hyperf.wiki/3.1/#/zh-cn/aop)
+
+### 基础功能
+- [路由](https://hyperf.wiki/3.1/#/zh-cn/router)
+- [中间件](https://hyperf.wiki/3.1/#/zh-cn/middleware/middleware)
+- [控制器](https://hyperf.wiki/3.1/#/zh-cn/controller)
+- [请求](https://hyperf.wiki/3.1/#/zh-cn/request)
+- [响应](https://hyperf.wiki/3.1/#/zh-cn/response)
+- [异常处理](https://hyperf.wiki/3.1/#/zh-cn/exception-handler)
+- [缓存](https://hyperf.wiki/3.1/#/zh-cn/cache)
+- [日志](https://hyperf.wiki/3.1/#/zh-cn/logger)
+- [分页器](https://hyperf.wiki/3.1/#/zh-cn/paginator)
+- [命令行](https://hyperf.wiki/3.1/#/zh-cn/command)
+- [自动化测试](https://hyperf.wiki/3.1/#/zh-cn/testing)
+- [视图](https://hyperf.wiki/3.1/#/zh-cn/view)
+- [视图引擎](https://hyperf.wiki/3.1/#/zh-cn/view-engine)
+- [国际化](https://hyperf.wiki/3.1/#/zh-cn/translation)
+- [验证器](https://hyperf.wiki/3.1/#/zh-cn/validation)
+- [Session 会话管理](https://hyperf.wiki/3.1/#/zh-cn/session)
+- [文件系统](https://hyperf.wiki/3.1/#/zh-cn/filesystem)
+
+### 数据库模型
+- [快速开始](https://hyperf.wiki/3.1/#/zh-cn/db/quick-start)
+- [查询构造器](https://hyperf.wiki/3.1/#/zh-cn/db/querybuilder)
+- [模型](https://hyperf.wiki/3.1/#/zh-cn/db/model)
+- [创建脚本](https://hyperf.wiki/3.1/#/zh-cn/db/gen)
+- [模型关系](https://hyperf.wiki/3.1/#/zh-cn/db/relationship)
+- [查询分页](https://hyperf.wiki/3.1/#/zh-cn/db/paginator)
+- [模型事件](https://hyperf.wiki/3.1/#/zh-cn/db/event)
+- [模型缓存](https://hyperf.wiki/3.1/#/zh-cn/db/model-cache)
+- [数据库迁移](https://hyperf.wiki/3.1/#/zh-cn/db/migration)
+- [修改器](https://hyperf.wiki/3.1/#/zh-cn/db/mutators)
+- [极简 DB 组件](https://hyperf.wiki/3.1/#/zh-cn/db/db)
+- [API 资源构造器](https://hyperf.wiki/3.1/#/zh-cn/db/resource)
+- [模型全文检索](https://hyperf.wiki/3.1/#/zh-cn/scout)
+
+### Hyperf 生态
+- [Nano](https://github.com/hyperf/nano)
+- [GoTask](https://github.com/hyperf/gotask)
+- [Box](https://hyperf.wiki/3.1/#/zh-cn/eco/box)
+
+### 微服务
+- [架构理念](https://hyperf.wiki/3.1/#/zh-cn/microservice)
+- [JSON RPC 服务](https://hyperf.wiki/3.1/#/zh-cn/json-rpc)
+- [gRPC 服务](https://hyperf.wiki/3.1/#/zh-cn/grpc)
+- [多路复用 RPC 服务](https://hyperf.wiki/3.1/#/zh-cn/rpc-multiplex)
+- [服务注册](https://hyperf.wiki/3.1/#/zh-cn/service-register)
+- [服务重试](https://hyperf.wiki/3.1/#/zh-cn/retry)
+- [服务熔断及降级](https://hyperf.wiki/3.1/#/zh-cn/circuit-breaker)
+- [服务限流](https://hyperf.wiki/3.1/#/zh-cn/rate-limit)
+- [配置中心](https://hyperf.wiki/3.1/#/zh-cn/config-center)
+- [调用链追踪](https://hyperf.wiki/3.1/#/zh-cn/tracer)
+- [服务监控](https://hyperf.wiki/3.1/#/zh-cn/metric)
+- [分布式事务](https://hyperf.wiki/3.1/#/zh-cn/distributed-transaction)
+- [Snowflake](https://hyperf.wiki/3.1/#/zh-cn/snowflake)
+
+### 网络服务
+- [TCP/UDP 服务](https://hyperf.wiki/3.1/#/zh-cn/tcp-server)
+- [WebSocket 服务](https://hyperf.wiki/3.1/#/zh-cn/websocket-server)
+- [Socket.io 服务](https://hyperf.wiki/3.1/#/zh-cn/socketio-server)
+- [协程风格服务](https://hyperf.wiki/3.1/#/zh-cn/coroutine-server)
+
+### 消息队列
+- [Redis 异步队列](https://hyperf.wiki/3.1/#/zh-cn/async-queue)
+- [AMQP](https://hyperf.wiki/3.1/#/zh-cn/amqp)
+- [Nats](https://hyperf.wiki/3.1/#/zh-cn/nats)
+- [NSQ](https://hyperf.wiki/3.1/#/zh-cn/nsq)
+- [Kafka](https://hyperf.wiki/3.1/#/zh-cn/kafka)
+
+### 客户端
+- [Redis 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/redis)
+- [Guzzle HTTP 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/guzzle)
+- [Elasticsearch 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/elasticsearch)
+- [Consul 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/consul)
+- [ETCD 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/etcd)
+- [WebSocket 协程客户端](https://hyperf.wiki/3.1/#/zh-cn/websocket-client)
+- [Nacos](https://hyperf.wiki/3.1/#/zh-cn/nacos)
+- [Jet](https://hyperf.wiki/3.1/#/zh-cn/jet)
+
+### 其它组件
+- [连接池](https://hyperf.wiki/3.1/#/zh-cn/pool)
+- [自定义进程](https://hyperf.wiki/3.1/#/zh-cn/process)
+- [辅助类](https://hyperf.wiki/3.1/#/zh-cn/support)
+- [定时任务](https://hyperf.wiki/3.1/#/zh-cn/crontab)
+- [Task 机制](https://hyperf.wiki/3.1/#/zh-cn/task)
+- [枚举类](https://hyperf.wiki/3.1/#/zh-cn/constants)
+- [信号处理器](https://hyperf.wiki/3.1/#/zh-cn/signal)
+- [ReactiveX](https://hyperf.wiki/3.1/#/zh-cn/reactive-x)
+- [Watcher](https://hyperf.wiki/3.1/#/zh-cn/watcher)
+- [开发者工具](https://hyperf.wiki/3.1/#/zh-cn/devtool)
+- [Phar 打包器](https://hyperf.wiki/3.1/#/zh-cn/phar)
+- [DAG](https://hyperf.wiki/3.1/#/zh-cn/dag)
+- [RPN - 逆波兰表示法](https://hyperf.wiki/3.1/#/zh-cn/rpn)
+- [Swagger 文档](https://hyperf.wiki/3.1/#/zh-cn/swagger)
+
+### 应用部署
+- [Docker Swarm 集群搭建](https://hyperf.wiki/3.1/#/zh-cn/tutorial/docker-swarm)
+- [DaoCloud Devops 搭建](https://hyperf.wiki/3.1/#/zh-cn/tutorial/daocloud)
+- [Supervisor 部署](https://hyperf.wiki/3.1/#/zh-cn/tutorial/supervisor)
+- [Nginx 反向代理](https://hyperf.wiki/3.1/#/zh-cn/tutorial/nginx)
+- [阿里云日志服务](https://hyperf.wiki/3.1/#/zh-cn/tutorial/aliyun-logger)
+
+### Awesome Hyperf
+- [协程组件库](https://hyperf.wiki/3.1/#/zh-cn/awesome-components)
+
+### 组件开发指南
+- [指南前言](https://hyperf.wiki/3.1/#/zh-cn/component-guide/intro)
+- [创建新的组件](https://hyperf.wiki/3.1/#/zh-cn/component-guide/create)
+- [ConfigProvider 机制](https://hyperf.wiki/3.1/#/zh-cn/component-guide/configprovider)
+
+### 历史版本更新记录
+- [3.0 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/3.0)
+- [2.2 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/2.2)
+- [2.1 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/2.1)
+- [2.0 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/2.0)
+- [1.1 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/1.1)
+- [1.0 更新记录](https://hyperf.wiki/3.1/#/zh-cn/changelog/1.0)
+
+### 版本升级指南
+- [1.1 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/1.1)
+- [2.0 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/2.0)
+- [2.1 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/2.1)
+- [2.2 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/2.2)
+- [3.0 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/3.0)
+- [3.1 升级指南](https://hyperf.wiki/3.1/#/zh-cn/upgrade/3.1)

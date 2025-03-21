@@ -18,6 +18,8 @@ use App\Http\Common\ResultCode;
 use Hyperf\Context\ApplicationContext;
 use Hyperf\Di\Aop\PropertyHandlerTrait;
 use Hyperf\Di\Aop\ProxyTrait;
+use Hyperf\Paginator\LengthAwarePaginator;
+use Hyperf\Resource\Json\JsonResource;
 
 class AbstractController
 {
@@ -45,6 +47,27 @@ class AbstractController
 
     protected function success(mixed $data = [], ?string $message = null): Result
     {
+        // 处理分页情况
+        if ($data instanceof LengthAwarePaginator) {
+            // dump("分页");
+            $data = [
+                'list' => $data->items(),
+                'total' => $data->total(),
+                'page' => $data->currentPage(),
+                'page_size' => $data->perPage(),
+                'total_page' => $data->lastPage(),
+            ];
+        }
+        if ($data instanceof JsonResource && $data->resource instanceof LengthAwarePaginator) {
+            // dump("资源分页");
+            $data = [
+                'list' => $data->resource->items(),
+                'total' => $data->resource->total(),
+                'page' => $data->resource->currentPage(),
+                'page_size' => $data->resource->perPage(),
+                'total_page' => $data->resource->lastPage(),
+            ];
+        }
         return new Result(ResultCode::SUCCESS, $message, $data);
     }
 

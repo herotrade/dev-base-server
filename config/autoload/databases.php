@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  @chenmaq
 
  */
+
 use App\Database\Commands\Ast\ModelAddFieldConstantsVisitor;
 use Hyperf\Database\Commands\Ast\ModelRewriteKeyInfoVisitor;
 use Hyperf\Database\Commands\Ast\ModelRewriteSoftDeletesVisitor;
@@ -54,7 +55,7 @@ return [
                 'visitors' => [
                     ModelRewriteKeyInfoVisitor::class,
                     ModelRewriteTimestampsVisitor::class,
-//                    ModelRewriteSoftDeletesVisitor::class,
+                    //                    ModelRewriteSoftDeletesVisitor::class,
                     Hyperf\Database\Commands\Ast\ModelRewriteGetterSetterVisitor::class,
                     ModelAddFieldConstantsVisitor::class,
                 ],

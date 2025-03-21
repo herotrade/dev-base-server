@@ -7,8 +7,9 @@ declare(strict_types=1);
  * @link     https://www.algoquant.pro
  * @document https://doc.algoquant.pro
  * @contact  @chenmaq
- 
+
  */
+
 use Hyperf\Framework\Bootstrap\PipeMessageCallback;
 use Hyperf\Framework\Bootstrap\WorkerExitCallback;
 use Hyperf\Framework\Bootstrap\WorkerStartCallback;
@@ -50,10 +51,17 @@ return [
         // Constant::OPTION_BUFFER_OUTPUT_SIZE     => 3 * 1024 * 1024,
         // 上传最大为4M
         Constant::OPTION_PACKAGE_MAX_LENGTH => 4 * 1024 * 1024,
+        // 设置task worker数量
+        Constant::OPTION_TASK_WORKER_NUM => swoole_cpu_num(),
+        // 因为 `Task` 主要处理无法协程化的方法，所以这里推荐设为 `false`，避免协程下出现数据混淆的情况
+        Constant::OPTION_TASK_ENABLE_COROUTINE => false,
     ],
     'callbacks' => [
         Event::ON_WORKER_START => [WorkerStartCallback::class, 'onWorkerStart'],
         Event::ON_PIPE_MESSAGE => [PipeMessageCallback::class, 'onPipeMessage'],
         Event::ON_WORKER_EXIT => [WorkerExitCallback::class, 'onWorkerExit'],
+        // Task callbacks
+        Event::ON_TASK => [Hyperf\Framework\Bootstrap\TaskCallback::class, 'onTask'],
+        Event::ON_FINISH => [Hyperf\Framework\Bootstrap\FinishCallback::class, 'onFinish'],
     ],
 ];

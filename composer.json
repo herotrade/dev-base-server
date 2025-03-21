@@ -17,6 +17,7 @@
     "ext-pdo_mysql": "*",
     "ext-redis": "*",
     "ext-swoole": ">=5.0",
+    "apielf/hyperf-query-builder": "^6.3",
     "friendsofhyperf/tinker": "^3.1",
     "hyperf/async-queue": "3.1.*",
     "hyperf/cache": "3.1.*",
@@ -47,11 +48,11 @@
     "hyperf/pool": "3.1.*",
     "hyperf/process": "3.1.*",
     "hyperf/redis": "3.1.*",
+    "hyperf/resource": "^3.1",
     "hyperf/server": "3.1.*",
+    "hyperf/task": "^3.1",
     "hyperf/utils": "3.1.*",
     "hyperf/validation": "~3.1",
-    "hyperf/view": "~3.1",
-    "hyperf/view-engine": "~3.1",
     "mineadmin/access": "~3.0",
     "mineadmin/app-store": "~3.0",
     "mineadmin/auth-jwt": "~3.0",
@@ -87,8 +88,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "HyperfTests\\": "./tests/",
-      "Mine\\AppStore\\": "class_map/"
+      "HyperfTests\\": "./tests/"
     }
   },
   "minimum-stability": "dev",

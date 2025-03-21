@@ -20,7 +20,7 @@ return [
         'collectors' => [],
         'ignore_annotations' => ['mixin'],
         'class_map' => [
-            ModelRewriteGetterSetterVisitor::class => BASE_PATH . '/class_map/ModelRewriteGetterSetter.php'
+            ModelRewriteGetterSetterVisitor::class => BASE_PATH . '/class_map/Hyperf/Database/Commands/Ast/ModelRewriteGetterSetterVisitor.php'
         ]
     ],
 ];

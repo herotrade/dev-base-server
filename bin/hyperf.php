@@ -20,6 +20,7 @@ require BASE_PATH . '/vendor/autoload.php';
 (function () {
     Plugin::init();
     Hyperf\Di\ClassLoader::init();
+    date_default_timezone_set(env('TIMEZONE', 'Asia/Shanghai'));
     /** @var Psr\Container\ContainerInterface $container */
     $container = require BASE_PATH . '/config/container.php';
 
