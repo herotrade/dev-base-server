@@ -7,7 +7,6 @@ declare(strict_types=1);
  * @link     https://www.algoquant.pro
  * @document https://doc.algoquant.pro
  * @contact  @chenmaq
- 
  */
 
 namespace App\Http\Admin\Request\Permission;
@@ -18,8 +17,18 @@ use Hyperf\Validation\Request\FormRequest;
 #[\Mine\Swagger\Attributes\FormRequest(
     schema: MenuSchema::class,
     only: [
-        'parent_id', 'name', 'code', 'icon', 'route', 'component', 'redirect',
-        'is_hidden', 'type', 'status', 'sort', 'remark',
+        'parent_id',
+        'name',
+        'code',
+        'icon',
+        'route',
+        'component',
+        'redirect',
+        'is_hidden',
+        'type',
+        'status',
+        'sort',
+        'remark',
     ]
 )]
 class MenuRequest extends FormRequest
@@ -48,6 +57,7 @@ class MenuRequest extends FormRequest
             'meta.affix' => 'sometimes|boolean',
             'meta.hidden' => 'sometimes|boolean',
             'meta.type' => 'sometimes|string|max:255',
+            'meta.activeName' => 'sometimes|string',
             'meta.cache' => 'sometimes|boolean',
             'meta.breadcrumbEnable' => 'sometimes|boolean',
             'meta.copyright' => 'sometimes|boolean',
