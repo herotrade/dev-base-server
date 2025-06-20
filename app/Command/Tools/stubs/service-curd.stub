@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use %MODELCLASS%;
+use %REQUESTCLASS%;
+use App\QueryBuilder\QueryBuilder;
+
+class %CLASS%
+{
+    public function list(%REQUEST% $request)
+    {
+        $query = %MODEL%::query();
+        return QueryBuilder::for($query, $request)
+            ->filters()
+            // ->defaultSort('sort')
+            // ->allowedSorts(['id', 'sort', 'created_at'])
+            ->page();
+    }
+
+    /**
+     * 详情
+     */
+    // public function show(int $id)
+    // {
+    //     $%MODEL_SNAKE_NAME% = %MODEL%::query()->find($id);
+    //     return $%MODEL_SNAKE_NAME%;
+    // }
+
+    /**
+     * 创建
+     */
+    public function store(array $data)
+    {
+        $%MODEL_SNAKE_NAME% = %MODEL%::query()->create($data);
+        return $%MODEL_SNAKE_NAME%;
+    }
+
+    /**
+     * 更新
+     */
+    public function update($id, array $data)
+    {
+        $%MODEL_SNAKE_NAME% = %MODEL%::query()->where('id', $id)->first();
+        $%MODEL_SNAKE_NAME%->update($data);
+        return $%MODEL_SNAKE_NAME%;
+    }
+
+    /**
+     * 删除
+     */
+    // public function destroy($id)
+    // {
+    //     %MODEL%::query()->where('id', $id)->delete();
+    //     return;
+    // }
+
+    /**
+     * 批量删除
+     */
+    public function batchDelete(array $ids)
+    {
+        return %MODEL%::query()->whereIn('id', $ids)->delete();
+    }
+}

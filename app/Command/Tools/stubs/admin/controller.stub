@@ -1,0 +1,61 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use App\Http\Common\Result;
+use Hyperf\HttpServer\Annotation\Middleware;
+use App\Http\Common\Controller\AbstractController;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\GetMapping;
+// use Hyperf\HttpServer\Annotation\PostMapping;
+// use Hyperf\HttpServer\Annotation\PutMapping;
+// use Hyperf\HttpServer\Annotation\DeleteMapping;
+use App\Http\Admin\Middleware\PermissionMiddleware;
+use App\Http\Common\Middleware\AccessTokenMiddleware;
+use App\Http\Common\Middleware\OperationMiddleware;
+use Mine\Access\Attribute\Permission;
+use Hyperf\HttpServer\Contract\RequestInterface;
+use %REQUESTCLASS%;
+use %SERVICE%;
+
+#[Controller(prefix: "%PREFIX%")]
+#[Middleware(middleware: AccessTokenMiddleware::class, priority: 100)]
+#[Middleware(middleware: PermissionMiddleware::class, priority: 99)]
+#[Middleware(middleware: OperationMiddleware::class, priority: 98)]
+class %CLASS% extends AbstractController
+{
+    protected RequestInterface $request;
+
+    public function __construct(
+        private readonly %SERVICECLASS% $service,
+        RequestInterface $request
+    ) {
+        $this->request = $request;
+        parent::__construct();
+    }
+
+    /**
+     * 说明：
+     * @return Result
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    #[GetMapping("list")]
+    #[Permission(code: 'xxx:xxx:index')]
+    public function list(%REQUEST% $request): Result
+    {
+        $result = $this->service->list($request);
+        return $this->success($result);
+    }
+}

@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use App\QueryBuilder\Model;
+
+class %CLASS% extends Model
+{
+     /**
+     * The table associated with the model.
+     */
+    protected ?string $table = '%TABLE%';
+
+    /**
+     * The attributes that are mass assignable.
+     */
+    protected array $fillable = %FILLABLE%;
+
+    /**
+     * The attributes that should be cast to native types.
+     */
+    protected array $casts = %CASTS%;
+}

@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use App\Http\Api\Request\BaseFormRequest;
+use Hyperf\Validation\Rule;
+
+class %CLASS% extends BaseFormRequest
+{
+    /**
+     * 规则
+     */
+    public function rules(): array
+    {
+        // Rule::unique(Model::getTable())->ignore($this->input('id'))
+        // Rule::unique(Model::getTable())
+        // 获取指定 key 的参数值
+        // $name = $this->input('name')
+        // Rule::exists(Model::getTable(), 'id')
+        // Rule::exists(Model::getTable())->where(function ($query) {
+        //    $query->where('account_id', 1);
+        //}),
+        // Rule::in(['first-zone', 'second-zone'])
+        // Rule::notIn(['sprinkles', 'cherries'])
+        // Rule::requiredIf($this->input('name') == 'admin')
+        // required_if:name,admin,...
+        // required_array_keys:key1,key2,... // 验证的字段必须是一个数组，并且必须至少包含指定的键。
+
+        return [];
+    }
+
+    /**
+     * 字段映射名称
+     * return array
+     */
+    public function attributes(): array
+    {
+        return [];
+    }
+}

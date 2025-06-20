@@ -43,87 +43,6 @@ app/
     └── QueryBuilder.php            # 查询构建器
 ```
 
-## 数据库迁移文件模板 `databases/migrations/{yyyy}_{mm}_{dd}_{hhiiss}_create_{table_name}_table.php`
-
-```php
-<?php
-
-use Hyperf\Database\Schema\Schema;
-use Hyperf\Database\Schema\Blueprint;
-use Hyperf\Database\Migrations\Migration;
-
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('{table_name}', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            // 在此添加表字段
-            $table->timestamps();
-            // 在此添加索引
-            $table->comment('{表注释}');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('{table_name}');
-    }
-};
-```
-
-## 模型模板 `app/Model/{Module}/{Entity}.php`
-
-```php
-<?php
-
-declare(strict_types=1);
-/**
- * 策略平台API
- * {实体}模型
- */
-
-namespace App\Model\{Module};
-
-use App\QueryBuilder\Model;
-use Carbon\Carbon;
-
-/**
- * @property int $id ID，主键
- * @property Carbon|null $created_at 创建时间
- * @property Carbon|null $updated_at 更新时间
- * {添加其他属性文档注释}
- */
-final class {Entity} extends Model
-{
-    /**
-     * The table associated with the model.
-     */
-    protected ?string $table = '{table_name}';
-
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected array $guarded = ['id', 'created_at', 'updated_at'];
-
-    /**
-     * The attributes that should be cast to native types.
-     */
-    protected array $casts = [
-        'id' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        // 添加其他字段的类型转换
-    ];
-}
-```
-
 ## 管理端控制器模板 `app/Http/Admin/Controller/{Module}/{Entity}Controller.php`
 
 ```php
@@ -178,7 +97,7 @@ class {Entity}Controller extends AbstractController
     public function index(): Result
     {
         $result = $this->{moduleService}->list($this->request);
-        // 根据配置决定是否使用资源类
+        // 根据配置（提示词中的配置信息 $config）决定是否使用资源类
         // return $this->success($result);
         return $this->success({Entity}Resource::collection($result));
     }
@@ -186,7 +105,7 @@ class {Entity}Controller extends AbstractController
     /**
      * 获取{实体}详情
      */
-    #[GetMapping('{id}')]
+    #[GetMapping('show/{id}')]
     #[Permission(code: '{module}:index')]
     public function show(int $id): Result
     {
@@ -197,7 +116,7 @@ class {Entity}Controller extends AbstractController
     /**
      * 创建{实体}
      */
-    #[PostMapping('')]
+    #[PostMapping('create')]
     #[Permission(code: '{module}:create')]
     public function store({Entity}Request $request): Result
     {
@@ -208,7 +127,7 @@ class {Entity}Controller extends AbstractController
     /**
      * 更新{实体}
      */
-    #[PutMapping('{id}')]
+    #[PutMapping('update/{id}')]
     #[Permission(code: '{module}:update')]
     public function update(int $id, {Entity}Request $request): Result
     {
@@ -219,7 +138,7 @@ class {Entity}Controller extends AbstractController
     /**
      * 删除{实体}
      */
-    #[DeleteMapping('{id}')]
+    #[DeleteMapping('delete/{id}')]
     #[Permission(code: '{module}:delete')]
     public function destroy(int $id): Result
     {
@@ -290,12 +209,12 @@ class {Entity}Request extends FormRequest
     }
 
     /**
-     * 错误消息
+     * 字段映射名称
      */
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            // 定义错误消息
+            // 'name' => '交易所名称'
         ];
     }
 }
@@ -329,16 +248,17 @@ class {Entity}Service
     public function list(RequestInterface $request): mixed
     {
         return QueryBuilder::for({Entity}::class, $request)
-            // 配置示例"filterable": ["=={过滤字段1}", "{过滤字段2}"]
+            // 配置（提示词中的配置信息 $config）示例 $config['fields']['filterable'] = ["=={过滤字段1}", "{过滤字段2}"]
             // 当数据库表中存在 id、created_at、updated_at 字段时使用
             ->filters(AllowedFilter::exact({过滤字段1}), {过滤字段2})
             // 当数据库表中不存在 id、created_at、updated_at 字段时使用
             // ->allowedFilters(AllowedFilter::exact({过滤字段1}), {过滤字段2})
+            // 当配置（提示词中的配置信息 $config）中默认排序配置为空时这里不需要添加默认排序
             ->defaultSort('{默认排序字段}')
             ->allowedSorts([{可排序字段列表}])
-            // 配置中 pagex:true 时
+            // 配置（提示词中的配置信息 $config）中 pagex:true 时
             ->pagex();
-            // 配置中 pagex:false 时
+            // 配置（提示词中的配置信息 $config）中 pagex:false 时
             // ->page();
     }
 
@@ -425,7 +345,7 @@ class {Entity}Controller extends AbstractController
     public function list(RequestInterface $request): Result
     {
         $result = $this->{moduleService}->list($request);
-        // 根据配置决定是否使用资源类
+        // 根据配置（提示词中的配置信息 $config）决定是否使用资源类
         // return $this->success($result);
         return $this->success({Entity}Resource::collection($result));
     }
@@ -491,16 +411,17 @@ class {Entity}Service
     public function list(RequestInterface $request): mixed
     {
         return QueryBuilder::for({Entity}::class, $request)
-            // 配置示例"filterable": ["=={过滤字段1}", "{过滤字段2}"]
+            // 配置（提示词中的配置信息 $config）示例 $config['fields']['filterable'] = ["=={过滤字段1}", "{过滤字段2}"]
             // 当数据库表中存在 id、created_at、updated_at 字段时使用
             ->filters(AllowedFilter::exact({过滤字段1}), {过滤字段2})
             // 当数据库表中不存在 id、created_at、updated_at 字段时使用
             // ->allowedFilters(AllowedFilter::exact({过滤字段1}), {过滤字段2})
+            // 当配置（提示词中的配置信息 $config）中默认排序配置为空时这里不需要添加默认排序
             ->defaultSort('{默认排序字段}')
             ->allowedSorts([{可排序字段列表}])
-            // 配置中 pagex:true 时
+            // 配置（提示词中的配置信息 $config）中 pagex:true 时
             ->pagex();
-            // 配置中 pagex:false 时
+            // 配置（提示词中的配置信息 $config）中 pagex:false 时
             // ->page();
     }
 }

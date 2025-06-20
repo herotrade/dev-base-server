@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use App\Http\Common\Result;
+use Hyperf\HttpServer\Annotation\Middleware;
+use App\Http\Api\Middleware\TokenMiddleware;
+use App\Http\Common\Controller\AbstractController;
+use Hyperf\HttpServer\Annotation\Controller;
+use Hyperf\HttpServer\Annotation\GetMapping;
+// use Hyperf\HttpServer\Annotation\PostMapping;
+// use Hyperf\HttpServer\Annotation\PutMapping;
+// use Hyperf\HttpServer\Annotation\DeleteMapping;
+use Hyperf\Di\Annotation\Inject;
+use %REQUESTCLASS%;
+use %SERVICE%;
+
+#[Controller(prefix: "%PREFIX%")]
+#[Middleware(TokenMiddleware::class)]
+class %CLASS% extends AbstractController
+{
+    #[Inject]
+    protected %SERVICECLASS% $service;
+
+    /**
+     * 说明：
+     * @return Result
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    #[GetMapping("list")]
+    public function list(%REQUEST% $request): Result
+    {
+        $result = $this->service->list($request);
+        return $this->success($result);
+    }
+}

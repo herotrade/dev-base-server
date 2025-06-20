@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * %CLASS%
+ * Author:%AUTHOR%
+ * Contact:tg:@chenmaq
+ * Version:1.0
+ * Date:%DATE%
+ * Website:%WEBSITE%
+ */
+
+namespace %NAMESPACE%;
+
+use %REQUESTCLASS%;
+use App\QueryBuilder\QueryBuilder;
+
+class %CLASS%
+{
+    public function list(%REQUEST% $request)
+    {
+        // $query = Model::query();
+        // return QueryBuilder::for($query, $request)
+        //    ->filters(['name'])
+        //    ->defaultSort('sort')
+        //    ->allowedSorts(['id', 'sort', 'created_at'])
+        //    ->page();
+    }
+}

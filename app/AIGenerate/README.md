@@ -2,6 +2,10 @@
 
 本目录包含用于 Hyperf CRUD 代码生成的工具和模板，帮助您快速生成符合项目规范的代码。
 
+## 向 AI 提问格式参考
+
+请使用（app/AIGenerate/PromptTemplate.md）这份提示词开发交易所模块功能。提示词中提到的标准模板为（app/AIGenerate/StandardTemplate.md） ，提示词中提到的开发文档为（app/AIGenerate/DevelopmentGuide.md）
+
 ## 文档索引
 
 1. [标准模板](./StandardTemplate.md) - 包含所有 CRUD 相关文件的标准模板
