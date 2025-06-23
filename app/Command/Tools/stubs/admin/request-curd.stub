@@ -12,16 +12,12 @@ declare(strict_types=1);
 
 namespace %NAMESPACE%;
 
-use Hyperf\Validation\Request\FormRequest;
+use App\Http\Admin\Request\BaseFormRequest;
 use Hyperf\Validation\Rule;
 use %MODELCLASS%;
 
-class %CLASS% extends FormRequest
+class %CLASS% extends BaseFormRequest
 {
-    public function authorize()
-    {
-        return true;
-    }
     /**
      * 规则
      */
