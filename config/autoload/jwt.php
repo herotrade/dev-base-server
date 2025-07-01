@@ -15,12 +15,20 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Token\RegisteredClaims;
 use Mine\Jwt\Jwt;
 
+if (!env("JWT_SECRET")) {
+    dump("JWT_SECRET is not set. Please run `php bin/hyperf.php jwt:secret` to generate a new key.");
+}
+
+if (!env("JWT_API_SECRET")) {
+    dump("JWT_API_SECRET is not set. Please run `php bin/hyperf.php jwt:secret` to generate a new key.");
+}
+
 return [
     'default' => [
         // jwt 配置 https://lcobucci-jwt.readthedocs.io/en/latest/
         'driver' => Jwt::class,
         // jwt 签名key
-        'key' => env('JWT_SECRET') ?? InMemory::base64Encoded(env('JWT_SECRET')),
+        'key' => InMemory::base64Encoded(env('JWT_SECRET', base64_encode(random_bytes(64)))),
         // jwt 签名算法 可选 https://lcobucci-jwt.readthedocs.io/en/latest/supported-algorithms/
         'alg' => new Sha256(),
         // token过期时间，单位为秒
@@ -48,13 +56,13 @@ return [
         // jwt 配置 https://lcobucci-jwt.readthedocs.io/en/latest/
         'driver' => Jwt::class,
         // jwt 签名key
-        'key' => env('JWT_API_SECRET') ?? InMemory::base64Encoded(env('JWT_API_SECRET')),
+        'key' => InMemory::base64Encoded(env('JWT_API_SECRET', base64_encode(random_bytes(64)))),
         // jwt 签名算法 可选 https://lcobucci-jwt.readthedocs.io/en/latest/supported-algorithms/
         'alg' => new Sha256(),
         // token过期时间，单位为秒
-        'ttl' => (int) env('JWT_API_TTL', 3600),
+        'ttl' => (int) env('JWT_API_TTL', 60 * 60 * 24 * 7),
         // 刷新token过期时间，单位为秒
-        'refresh_ttl' => (int) env('JWT_API_REFRESH_TTL', 7200),
+        'refresh_ttl' => (int) env('JWT_API_REFRESH_TTL', 60 * 60 * 24 * 14),
         // 黑名单模式
         'blacklist' => [
             // 是否开启黑名单
@@ -64,7 +72,7 @@ return [
             // 黑名单缓存驱动
             'connection' => 'default',
             // 黑名单缓存时间 该时间一定要设置比token过期时间要大一点，最好设置跟过期时间一样
-            'ttl' => (int) env('JWT_API_BLACKLIST_TTL', 7201),
+            'ttl' => (int) env('JWT_API_BLACKLIST_TTL', 60 * 60 * 24 * 7 + 1),
         ],
         'claims' => [
             // 默认的jwt claims
